@@ -1,3 +1,3 @@
-export const recipesURL = "https://api.edamam.com/api/recipes/v2";
-export const appId = "01e5606a";
-export const appKey = "68b51a873b1be337f9094001de862657";
+export const recipesURL = process.env.RECIPES_URL;
+export const appId = process.env.RECIPES_APP_ID;
+export const appKey = process.env.RECIPES_APP_KEY;
