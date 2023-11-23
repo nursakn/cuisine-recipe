@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UCard, UButton } from "#ui-colors/components";
 import type { LinksItem, RecipeItem } from "~/server/typings";
+import { getRecipeIdFromUrl } from "~/utils/get-id";
 
 const props = defineProps<{
   recipe: RecipeItem;
@@ -8,10 +9,7 @@ const props = defineProps<{
 }>();
 
 const link = computed(() => {
-  const url = new URL(props.links.self.href);
-  const id = url.pathname.substring(16); // v2/api/...
-  
-  return `/recipes/${id}`;
+  return `/recipes/${getRecipeIdFromUrl(props.links)}`;
 });
 </script>
 
@@ -23,10 +21,13 @@ const link = computed(() => {
     <template #default>
       <div class="flex flex-col w-full h-full justify-between">
         <div>
-          <div class="flex flex-wrap gap-2 mb-2">
-            <UBadge v-for="(type, index) in recipe.dishType" :key="type">
-              {{ type }}
-            </UBadge>
+          <div class="flex justify-between gap-2">
+            <div class="flex flex-wrap">
+              <UBadge v-for="(type, index) in recipe.dishType" :key="type">
+                {{ type }}
+              </UBadge>
+            </div>
+            <FavoriteItem :recipe-id="getRecipeIdFromUrl(links)" />
           </div>
           <p>
             {{ recipe.externalId }}

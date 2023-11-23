@@ -1,3 +1,19 @@
+export type LoginRegisterDTO = {
+  username: string;
+  password: string;
+}
+
+export type FavoriteAddDTO = {
+  userId: string;
+  recipeId: string;
+}
+
+export type CookingAddDTO = {
+  userId: string;
+  recipeId: string;
+  imageUrl: string;
+}
+
 export type FilterTypes = "cuisineType" | "any"
 
 export type FiltersObject = Partial<Record<FilterTypes, any>>;

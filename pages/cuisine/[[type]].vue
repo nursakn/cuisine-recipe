@@ -1,8 +1,14 @@
+<script setup lang="ts">
+const route = useRoute();
+
+const type = computed<string>(() => typeof(route.params.type) === "string" ? route.params.type : route.params.type[0]);
+</script>
+
 <template>
-  <UContainer>
-    <p>{{ $route.params.type }}</p>
+  <UContainer class="py-5">
+    <h1 class="text-5xl font-medium mb-10">{{ type.charAt(0).toUpperCase() }}{{ type.slice(1) }}</h1>
     <Suspense>
-      <RecipeGrid :filters="{ cuisineType: $route.params.type }" />
+      <RecipeGrid :filters="{ cuisineType: type }" />
       <template #fallback>
         <RecipeGridLoading />
       </template>
