@@ -5,17 +5,26 @@ const userStore = useUserStore();
 
 const favorites = ref<Favorite[]>([]);
 const favoritesLoading = ref(false);
+const totalExp = ref(0);
 
 onMounted(async () => {
   favoritesLoading.value = true;
   favorites.value = await $fetch("/api/recipes/favorites/get-by-user", { method: "POST", body: { userId: userStore.currentUser.id } });
-  console.log(favorites.value);
+  totalExp.value = await $fetch("/api/recipes/experience/count", { method: "POST", body: { userId: userStore.currentUser.id } });
   favoritesLoading.value = false;
 })
+
+const level = computed(() => Math.floor(totalExp.value / 1000));
 </script>
 
 <template>
   <UContainer class="py-4">
+    <p class="text-xl font-medium text-center mb-4">
+      Level: {{ level + 1 }}
+    </p>
+    <UProgress class="mb-4" :value="(totalExp - level * 1000) / 10" />
+    Exp for next level: {{ ((level + 1) * 1000 - totalExp) }}
+    <UDivider class="mb-4 mt-4" />
     <div>
       <h2 class="text-3xl mb-4">Favorites</h2>
       <p v-if="favoritesLoading">loading</p>

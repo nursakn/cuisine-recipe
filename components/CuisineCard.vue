@@ -4,7 +4,20 @@ const props = defineProps<{
   link?: string,
 }>();
 
-const isLoggedIn = ref(true);
+const userStore = useUserStore();
+
+const isLoggedIn = computed(() => userStore.isLoggedIn);
+
+const isLoading = ref(false);
+const totalExp = ref(0);
+
+onMounted(async () => {
+  isLoading.value = true;
+  totalExp.value = await $fetch("/api/recipes/experience/count-by-cuisine", { method: "POST", body: { userId: userStore.currentUser.id, cuisineType: props.cuisineType } });
+  isLoading.value = false;
+})
+
+const level = computed(() => Math.floor(totalExp.value / 1000));
 </script>
 
 <template>
@@ -22,9 +35,9 @@ const isLoggedIn = ref(true);
       </UTooltip>
       <div v-else class="flex gap-2 items-center">
         <p class="text-sm">
-            Lvl&nbsp;?
+            Lvl&nbsp;{{ level + 1 }}
           </p>
-        <UProgress class="h-1" :value="20" />
+        <UProgress class="h-1" :value="(totalExp - level * 1000) / 10" />
       </div>
     </div>
   </UCard>

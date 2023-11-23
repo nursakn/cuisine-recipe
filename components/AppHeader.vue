@@ -7,7 +7,7 @@ const userStore = useUserStore();
 <template>
   <header class="py-5 bg-green-500">
     <UContainer class="justify-between items-center flex">
-      <ULink to="/" class="font-bold text-white dark:text-white">FlavorFul</ULink>
+      <ULink to="/" class="font-bold text-white dark:text-white">Global Culinary Quest</ULink>
       <UButton v-if="userStore.isLoggedIn" class="flex items-center gap-2" to="/profile">
         <UAvatar icon="i-heroicons-user" /> {{ userStore.currentUser.username }}
       </UButton>

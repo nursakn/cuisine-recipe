@@ -52,47 +52,54 @@ const imageAspectRatio = computed(() => 1)
 
 const isFileUploading = ref(false);
 
+const cookingAdded = ref(false);
+
 async function onUpload() {
   isFileUploading.value = true;
 
-  if (!fileEl.value || fileEl.value?.input.files === null) {
-    return;
-  }
+  await $fetch("/api/recipes/cooking/add", { method: "POST", body: { userId: userStore.currentUser.id, recipeId: props.id, imageUrl: recipe.value?.cuisineType } });
+  cookingAdded.value = true;
+  toast.add({ title: "Congratulations", description: "You have earned 250XP for cooking dish" });
+  // if (!fileEl.value || fileEl.value?.input.files === null) {
+  //   return;
+  // }
 
-  if (fileEl.value.input.files.length === 0) {
-    toast.add({ title: "Add image of your dish" });
-    isFileUploading.value = false;
-    return;
-  }
+  // if (fileEl.value.input.files.length === 0) {
+  //   toast.add({ title: "Add image of your dish" });
+  //   isFileUploading.value = false;
+  //   return;
+  // }
 
-  const file = fileEl.value.input.files[0];
+  // const file = fileEl.value.input.files[0];
 
-  try {
-    console.log(file);
-    const response = await $fetch(
-      `/api/upload-file`,
-      {
-        method: 'POST',
-        body: { file: file },
-      },
-    );
+  // try {
+  //   console.log(file);
+  //   const response = await $fetch(
+  //     `/api/upload-file`,
+  //     {
+  //       method: 'POST',
+  //       body: { file: file },
+  //     },
+  //   );
 
-    const newBlob = (await response.json()) as PutBlobResult;
-    blob.value = newBlob;
+  //   const newBlob = (await response.json()) as PutBlobResult;
+  //   blob.value = newBlob;
 
-    await $fetch("/api/recipes/cooking/add", { method: "POST", body: {
-      userId: userStore.currentUser.id,
-      recipeId: props.id,
-      imageUrl: blob.value.url,
-    }})
+  //   await $fetch("/api/recipes/cooking/add", { method: "POST", body: {
+  //     userId: userStore.currentUser.id,
+  //     recipeId: props.id,
+  //     imageUrl: blob.value.url,
+  //   }})
 
-    toast.add({ title: "You added your image" });
-  } catch (e) {
-    toast.add({ title: "Error occured while uploading image" });
-    console.log(e);
-  } finally {
-    isFileUploading.value = false;
-  }
+  //   toast.add({ title: "You added your image" });
+  // } catch (e) {
+  //   toast.add({ title: "Error occured while uploading image" });
+  //   console.log(e);
+  // } finally {
+  //   isFileUploading.value = false;
+  // }
+
+  isFileUploading.value = false;
 }
 </script>
 
@@ -129,7 +136,9 @@ async function onUpload() {
       </template>
     </UAccordion>
     <h2 class="text-lg font-bold">Ingredients:</h2>
-    <UInput ref="fileEl" type="file" :disabled="isFileUploading" />
-    <UButton label="I cooked it!" @click="onUpload" :loading="isFileUploading" />
+    <UTable class="mb-10" :rows="ingredientItems" />
+    <!-- <UInput ref="fileEl" type="file" :disabled="isFileUploading" /> -->
+
+    <UButton size="xl" block label="I cooked it!" @click="onUpload" :disabled="cookingAdded" :loading="isFileUploading" />
   </div>
 </template>
