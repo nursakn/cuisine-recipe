@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useHead({
+  title: "Global Culinary Quest | Recipe"
+})
 </script>
 
 <template>

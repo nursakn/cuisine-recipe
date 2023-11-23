@@ -2,6 +2,7 @@
 import type { Favorite } from '~/types';
 
 const userStore = useUserStore();
+const router = useRouter();
 
 const favorites = ref<Favorite[]>([]);
 const favoritesLoading = ref(false);
@@ -14,7 +15,22 @@ onMounted(async () => {
   favoritesLoading.value = false;
 })
 
+watch(() => userStore.currentUser, () => {
+  if (!userStore.currentUser) {
+    router.replace("/auth");
+  }
+})
+
 const level = computed(() => Math.floor(totalExp.value / 1000));
+
+function logout() {
+  userStore.logout();
+  router.replace("/")
+}
+
+useHead({
+  title: "Profile"
+})
 </script>
 
 <template>
@@ -38,5 +54,6 @@ const level = computed(() => Math.floor(totalExp.value / 1000));
       </div>
       <p v-else>You don't have favorites yet</p>
     </div>
+    <UButton label="logout" @click="logout" />
   </UContainer>
 </template>

@@ -6,6 +6,10 @@ export const useUserStore = defineStore('auth', () => {
 
   const isLoggedIn = computed(() => currentUser.value.id !== "");
 
+  function logout() {
+    currentUser.value = { id: "", username: "" };
+  }
+
   async function setCurrentUser(user: User) {
     currentUser.value = user;
   }
@@ -14,5 +18,6 @@ export const useUserStore = defineStore('auth', () => {
     currentUser: computed(() => currentUser.value),
     isLoggedIn,
     setCurrentUser,
+    logout
   }
 });

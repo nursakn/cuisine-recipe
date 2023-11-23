@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useHead({
+  title: "Auth"
+})
+
 import type { LoginRegisterDTO } from '~/server/typings';
 import { useUserStore } from '~/stores/auth';
 import type { User } from '~/types';

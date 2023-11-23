@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const route = useRoute();
 
+useHead({
+  title: `Global Culinary Quest | ${route.params.type}`
+})
+
 const type = computed<string>(() => typeof(route.params.type) === "string" ? route.params.type : route.params.type[0]);
 </script>
 
